@@ -1,0 +1,20 @@
+{
+    "frames_processed": 29,
+    "localization_coverage": 96.55172413793103,
+    "direct_detections": 21,
+    "tracking_holds": 7,
+    "lost_frames": 1,
+    "ocr_frames_processed": 29,
+    "events_detected": 3,
+    "events_confirmed": 2,
+    "events_rejected": 1,
+    "events_uncertain": 0,
+    "confirmation_rate": 66.66666666666666,
+    "rejection_rate": 33.33333333333333,
+    "average_confirmed_reliability": 90.0,
+    "confirmed_score_changes": {
+        "player_2": 3,
+        "player_3": 5
+    },
+    "total_confirmed_increase": 8
+}
