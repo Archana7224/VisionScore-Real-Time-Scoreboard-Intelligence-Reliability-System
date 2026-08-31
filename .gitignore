@@ -1,3 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+
+# Runtime-generated artifacts (created per upload/demo run)
+static/jobs/
+uploads/
