@@ -1,2 +1,7 @@
+# Core computer-vision + OCR pipeline (unchanged tech stack)
 opencv-python
 numpy
+easyocr
+
+# Web dashboard layer (serves the interactive console + runs the pipeline on uploads)
+flask

@@ -18,6 +18,9 @@
 
 * { box-sizing: border-box; }
 
+/* The hidden attribute must win over any display rule below. */
+[hidden] { display: none !important; }
+
 html.bg-base { background: var(--base); }
 
 body {
@@ -422,9 +425,10 @@ table.events td {
 .lightbox {
   position: fixed; inset: 0; z-index: 50;
   background: rgba(3,5,7,0.9);
-  display: grid; place-items: center;
+  display: none; place-items: center;
   padding: 40px; cursor: zoom-out;
 }
+.lightbox.open { display: grid; }
 .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 10px; border: 1px solid var(--accent-line); }
 
 /* ---------- Responsive ---------- */

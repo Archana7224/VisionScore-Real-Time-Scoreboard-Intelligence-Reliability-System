@@ -345,8 +345,13 @@
   function openLightbox(src) {
     lightboxImg.src = src;
     lightbox.hidden = false;
+    lightbox.classList.add("open");
   }
-  lightbox.addEventListener("click", () => { lightbox.hidden = true; lightboxImg.src = ""; });
+  lightbox.addEventListener("click", () => {
+    lightbox.classList.remove("open");
+    lightbox.hidden = true;
+    lightboxImg.src = "";
+  });
 
   // ---------- events ----------
   dropzone.addEventListener("click", () => fileInput.click());
