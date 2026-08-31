@@ -1,0 +1,4 @@
+event_frame,player,old_score,new_score,delta,start_frame,end_frame,segment_length,reliability,status,reason
+train_003.jpg,player_2,34,31,-3,train_003.jpg,train_012.jpg,10,10,REJECTED,score_returned_to_previous_value
+train_013.jpg,player_2,31,34,3,train_013.jpg,train_029.jpg,17,90,CONFIRMED,stable_new_score
+train_017.jpg,player_3,43,48,5,train_017.jpg,train_029.jpg,13,90,CONFIRMED,stable_new_score

@@ -1,0 +1,54 @@
+{
+    "system": "VisionScore",
+    "version": "1.0",
+    "dataset": {
+        "frames_processed": 29
+    },
+    "event_summary": {
+        "events_analyzed": 3,
+        "events_confirmed": 2,
+        "events_rejected": 1,
+        "events_uncertain": 0,
+        "average_confirmed_reliability": 90.0
+    },
+    "confirmed_events": [
+        {
+            "event_frame": "train_013.jpg",
+            "player": "player_2",
+            "old_score": 31,
+            "new_score": 34,
+            "delta": 3,
+            "start_frame": "train_013.jpg",
+            "end_frame": "train_029.jpg",
+            "segment_length": 17,
+            "reliability": 90.0,
+            "status": "CONFIRMED",
+            "reason": "stable_new_score"
+        },
+        {
+            "event_frame": "train_017.jpg",
+            "player": "player_3",
+            "old_score": 43,
+            "new_score": 48,
+            "delta": 5,
+            "start_frame": "train_017.jpg",
+            "end_frame": "train_029.jpg",
+            "segment_length": 13,
+            "reliability": 90.0,
+            "status": "CONFIRMED",
+            "reason": "stable_new_score"
+        }
+    ],
+    "rejected_events": [
+        {
+            "event_frame": "train_003.jpg",
+            "player": "player_2",
+            "old_score": 34,
+            "new_score": 31,
+            "delta": -3,
+            "reliability": 10.0,
+            "status": "REJECTED",
+            "reason": "score_returned_to_previous_value"
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+frame,player,previous_score,new_score,change,event
+train_004.jpg,player_2,34,31,-3,SCORE_CHANGE
+train_014.jpg,player_2,31,34,3,SCORE_CHANGE
+train_018.jpg,player_3,43,48,5,SCORE_CHANGE
