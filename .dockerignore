@@ -1,0 +1,16 @@
+# Local virtualenv (rebuilt inside the image)
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Generated at runtime - not needed in the image
+uploads/
+static/jobs/
+
+# Dev / VCS noise
+.git/
+.gitignore
+*.log
+.DS_Store
+node_modules/

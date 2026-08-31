@@ -1,7 +1,10 @@
 # Core computer-vision + OCR pipeline (unchanged tech stack)
-opencv-python
+# headless build has no GUI deps -> smaller, server-friendly image
+opencv-python-headless
 numpy
 easyocr
 
 # Web dashboard layer (serves the interactive console + runs the pipeline on uploads)
 flask
+# Production WSGI server used when running in a container
+gunicorn

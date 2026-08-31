@@ -1,0 +1,15 @@
+# One-click deploy config for Render (https://render.com).
+# In Render: New -> Blueprint -> point at this repo. Render reads the
+# Dockerfile and runs the container. Use at least the "standard" plan:
+# EasyOCR + torch need ~2GB RAM to load the models.
+services:
+  - type: web
+    name: visionscore-dashboard
+    runtime: docker
+    plan: standard
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "8080"
