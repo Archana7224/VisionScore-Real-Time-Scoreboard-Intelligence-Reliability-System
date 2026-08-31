@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-base">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VisionScore — Scoreboard Intelligence Console</title>
+  <meta name="theme-color" content="#0a0e12" />
+  <meta name="description"
+        content="VisionScore: upload a video or image and watch the OpenCV + OCR pipeline detect and extract scoreboard data in real time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="reticle"></span>
+      </div>
+      <div class="brand-text">
+        <h1>VisionScore</h1>
+        <p>Real-Time Scoreboard Intelligence &amp; Reliability Console</p>
+      </div>
+    </div>
+    <div class="status-cluster">
+      <div class="status-pill" id="statusPill">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Idle</span>
+      </div>
+      <div class="clock" id="elapsedClock">00.00s</div>
+    </div>
+  </header>
+
+  <!-- Stage rail: the four stages of the demo -->
+  <nav class="stage-rail" aria-label="Pipeline stages">
+    <div class="stage" id="stage-input" data-stage="input">
+      <span class="stage-idx">1</span>
+      <span class="stage-name">Input</span>
+    </div>
+    <div class="rail-line"></div>
+    <div class="stage" id="stage-run" data-stage="run">
+      <span class="stage-idx">2</span>
+      <span class="stage-name">Pipeline Running</span>
+    </div>
+    <div class="rail-line"></div>
+    <div class="stage" id="stage-detect" data-stage="detect">
+      <span class="stage-idx">3</span>
+      <span class="stage-name">Detection</span>
+    </div>
+    <div class="rail-line"></div>
+    <div class="stage" id="stage-extract" data-stage="extract">
+      <span class="stage-idx">4</span>
+      <span class="stage-name">Extracted Data</span>
+    </div>
+  </nav>
+
+  <main class="grid">
+    <!-- Panel 1: Input -->
+    <section class="panel span-4" id="panelInput">
+      <div class="panel-head">
+        <h2><span class="num">01</span> Input Source</h2>
+        <span class="hint" id="inputHint">video / image</span>
+      </div>
+      <div class="panel-body">
+        <div id="dropzone" class="dropzone" tabindex="0" role="button"
+             aria-label="Upload a video or image">
+          <div class="dz-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="34" height="34" fill="none"
+                 stroke="currentColor" stroke-width="1.6">
+              <path d="M12 16V4m0 0L7 9m5-5 5 5" />
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+            </svg>
+          </div>
+          <p class="dz-title">Drop a video or image</p>
+          <p class="dz-sub">or click to browse — MP4, MOV, JPG, PNG</p>
+          <input type="file" id="fileInput" accept="video/*,image/*" hidden />
+        </div>
+
+        <div class="or-split"><span>or</span></div>
+
+        <button class="btn ghost full" id="demoBtn">
+          <span class="btn-dot"></span> Run bundled demo (bowling_scoreboard.mp4)
+        </button>
+
+        <div class="preview-shell" id="inputPreview" hidden>
+          <div class="preview-tag" id="inputTag">INPUT</div>
+          <video id="inputVideo" playsinline muted loop controls hidden></video>
+          <img id="inputImage" alt="Uploaded input frame" hidden />
+          <div id="inputSlideshow" class="slideshow" hidden>
+            <img id="slideImg" alt="Input video frame stream" />
+            <div class="slide-meta"><span id="slideLabel">frame</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 2: Pipeline runtime -->
+    <section class="panel span-8" id="panelRun">
+      <div class="panel-head">
+        <h2><span class="num">02</span> Pipeline Runtime</h2>
+        <span class="hint" id="runHint">OpenCV · EasyOCR · Temporal · Reliability</span>
+      </div>
+      <div class="panel-body run-body">
+        <div class="run-left">
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span id="progStage">standby</span>
+              <span id="progPct">0%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+          </div>
+          <div class="live-frame">
+            <div class="preview-tag live">LIVE · DETECTION</div>
+            <img id="liveFrame" alt="Live annotated frame" />
+            <div class="live-empty" id="liveEmpty">Awaiting input…</div>
+          </div>
+        </div>
+        <div class="run-right">
+          <div class="console-head">
+            <span>console</span>
+            <span class="blink" id="consoleBlink">▍</span>
+          </div>
+          <div class="console" id="console" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 3: Detection grid -->
+    <section class="panel span-7" id="panelDetect">
+      <div class="panel-head">
+        <h2><span class="num">03</span> Scoreboard Detection</h2>
+        <span class="hint" id="detectHint">bounding box + confidence per frame</span>
+      </div>
+      <div class="panel-body">
+        <div class="detect-grid" id="detectGrid">
+          <div class="empty-note" id="detectEmpty">
+            Detected frames will appear here once the pipeline runs.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 4: Extracted data -->
+    <section class="panel span-5" id="panelExtract">
+      <div class="panel-head">
+        <h2><span class="num">04</span> Extracted Scoreboard Data</h2>
+        <span class="hint">final output</span>
+      </div>
+      <div class="panel-body">
+        <div class="final-scores" id="finalScores">
+          <div class="empty-note">Final scores appear after extraction.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics + events full width -->
+    <section class="panel span-12" id="panelReport">
+      <div class="panel-head">
+        <h2><span class="num">05</span> Intelligence Report</h2>
+        <span class="hint" id="reportHint">metrics &amp; validated events</span>
+      </div>
+      <div class="panel-body">
+        <div class="metrics" id="metrics">
+          <div class="empty-note">Run the pipeline to generate metrics.</div>
+        </div>
+        <div class="events-wrap" id="eventsWrap" hidden>
+          <h3 class="sub">Validated score-change events</h3>
+          <table class="events">
+            <thead>
+              <tr>
+                <th>Player</th><th>Change</th><th>Delta</th>
+                <th>Status</th><th>Reliability</th><th>Event frame</th>
+              </tr>
+            </thead>
+            <tbody id="eventsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    VisionScore v1.0 &nbsp;·&nbsp; Computer Vision • OCR • Temporal Intelligence • Reliability Analysis
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <img id="lightboxImg" alt="Enlarged detection frame" />
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
